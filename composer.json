@@ -1,7 +1,7 @@
 {
   "name": "adamwojs/php-cs-fixer-phpdoc-force-fqcn",
   "type": "library",
-  "license": "GPL",
+  "license": "MIT",
   "authors": [
     {
       "name": "Adam Wójs",

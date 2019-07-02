@@ -82,6 +82,10 @@ class ForceFQCNFixer implements DefinedFixerInterface
                 }
 
                 foreach ($annotations as $annotation) {
+                    if ($currentNamespace === null) {
+                        continue;
+                    }
+
                     $this->fixAnnotation($currentNamespace, $annotation);
                 }
 

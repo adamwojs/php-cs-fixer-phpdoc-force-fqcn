@@ -24,8 +24,8 @@
     ]
   },
   "scripts": {
-    "fix-cs": "@php ./vendor/bin/php-cs-fixer fix src -v --show-progress=estimating",
-    "run-tests": "@php ./vendor/bin/phpunit -c phpunit.xml.dist"
+    "fix-cs": "php-cs-fixer fix src -v --show-progress=estimating",
+    "run-tests": "phpunit -c phpunit.xml.dist"
   },
   "extra": {
     "branch-alias": {

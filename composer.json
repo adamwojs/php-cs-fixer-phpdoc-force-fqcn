@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "fix-cs": "@php ./vendor/bin/php-cs-fixer fix src -v --show-progress=estimating"
+    "fix-cs": "php-cs-fixer fix src -v --show-progress=estimating"
   },
   "extra": {
     "branch-alias": {

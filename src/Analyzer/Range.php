@@ -56,4 +56,9 @@ final class Range
 
         return true;
     }
+
+    public function __toString()
+    {
+        return sprintf("[%s,%s]", $this->startIndex, $this->endIndex ?? 'INF');
+    }
 }

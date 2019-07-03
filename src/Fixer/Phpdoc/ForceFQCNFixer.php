@@ -59,21 +59,20 @@ class ForceFQCNFixer implements DefinedFixerInterface
 
         $tokens->rewind();
 
-        $currentNamespace = null;
         foreach ($tokens as $index => $token) {
-            if ($token->isGivenKind(T_NAMESPACE)) {
-                $namespaceFQCN = $this->getNamespaceDeclaration($tokens, $index);
+            if ($token->isGivenKind(T_DOC_COMMENT)) {
+                $currentNamespace = null;
                 foreach ($namespaces as $namespace) {
-                    if ($namespace->getName() == $namespaceFQCN) {
+                    if ($namespace->getScope()->inRange($index)) {
                         $currentNamespace = $namespace;
                         break;
                     }
                 }
 
-                continue;
-            }
+                if ($currentNamespace === null) {
+                    continue;
+                }
 
-            if ($token->isGivenKind(T_DOC_COMMENT)) {
                 $docBlock = new DocBlock($token->getContent());
 
                 $annotations = $docBlock->getAnnotationsOfType(Annotation::getTagsWithTypes());
@@ -128,22 +127,5 @@ class ForceFQCNFixer implements DefinedFixerInterface
         if ($types !== $annotation->getTypes()) {
             $annotation->setTypes($types);
         }
-    }
-
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens $tokens
-     * @param int $index
-     *
-     * @return string
-     */
-    private function getNamespaceDeclaration(Tokens $tokens, int $index): string
-    {
-        $declarationStartIndex = $index;
-        $declarationEndIndex = $tokens->getNextTokenOfKind($index, [';', '{']);
-
-        return trim($tokens->generatePartialCode(
-            $declarationStartIndex + 1,
-            $declarationEndIndex - 1
-        ));
     }
 }

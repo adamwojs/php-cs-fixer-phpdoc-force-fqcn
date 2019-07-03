@@ -27,6 +27,17 @@ final class NamespaceAnalyzer
 
         $imports = $this->getImportsPerNamespace();
 
+        if (empty($imports)) {
+            // Global namespace without imports
+            return [
+                new NamespaceInfo(
+                    "",
+                    new Range(0, $this->tokens->count()),
+                    []
+                )
+            ];
+        }
+
         $this->tokens->rewind();
         foreach ($this->tokens as $index => $token) {
             if (!$token->isGivenKind(T_NAMESPACE)) {
@@ -42,14 +53,27 @@ final class NamespaceAnalyzer
             ));
 
             $scope = $this->getNamespaceScope($declarationEndIndex);
-            $namespaceImports = array_filter($imports, function (ImportInfo $info) use ($scope) {
-                return $scope->inRange($info->getDeclaration()->getStartIndex());
-            });
+
+            $namespaceImports = [];
+            foreach ($imports as $shortName => $import) {
+                if ($scope->inRange($import->getDeclaration()->getStartIndex())) {
+                    $namespaceImports[$shortName] = $import;
+                    unset($imports[$shortName]);
+                }
+            }
 
             $namespaces[] = new NamespaceInfo(
                 $namespaceName,
                 $scope,
                 $namespaceImports
+            );
+        }
+
+        if (!empty($imports)) {
+            $namespaces[] = new NamespaceInfo(
+                "",
+                $this->getNamespaceScope(reset($imports)->getDeclaration()->getStartIndex()),
+                $imports
             );
         }
 

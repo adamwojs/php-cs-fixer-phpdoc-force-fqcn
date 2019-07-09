@@ -19,10 +19,5 @@
   },
   "scripts": {
     "fix-cs": "php-cs-fixer fix src -v --show-progress=estimating"
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
-    }
   }
 }

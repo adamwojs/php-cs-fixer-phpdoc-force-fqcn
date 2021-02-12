@@ -2,6 +2,14 @@
 
 [php-cs-fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) rule to force using FQCN (Fully-Qualified Class Name) in DocBlock comments. 
 
+## Installation
+
+You can install the package via composer:
+
+```bash
+composer require --dev adamwojs/php-cs-fixer-phpdoc-force-fqcn
+```
+
 ## Usage
 
 In your .php_cs file: 

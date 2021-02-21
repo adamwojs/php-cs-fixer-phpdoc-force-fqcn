@@ -57,7 +57,7 @@ class ForceFQCNFixer implements DefinedFixerInterface
     {
         $namespaces = (new NamespaceAnalyzer($tokens))->getNamespaces();
 
-        $tokens->rewind();
+        \PHP_VERSION_ID < 80000 ? $tokens->rewind() : $tokens->getIterator();
 
         foreach ($tokens as $index => $token) {
             if ($token->isGivenKind(T_DOC_COMMENT)) {

@@ -38,7 +38,10 @@ final class NamespaceAnalyzer
             ];
         }
 
-        $this->tokens->rewind();
+        if (\PHP_VERSION_ID < 80000) {
+            $this->tokens->rewind();
+        }
+
         foreach ($this->tokens as $index => $token) {
             if (!$token->isGivenKind(T_NAMESPACE)) {
                 continue;

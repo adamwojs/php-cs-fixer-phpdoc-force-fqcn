@@ -9,14 +9,14 @@ use AdamWojs\PhpCsFixerPhpdocForceFQCN\Analyzer\NamespaceInfo;
 use AdamWojs\PhpCsFixerPhpdocForceFQCN\FQCN\FQCNTypeNormalizer;
 use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
-use PhpCsFixer\Fixer\DefinedFixerInterface;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
-class ForceFQCNFixer implements DefinedFixerInterface
+class ForceFQCNFixer implements FixerInterface
 {
     /** @var \AdamWojs\PhpCsFixerPhpdocForceFQCN\FQCN\FQCNTypeNormalizer */
     private $normalizer;

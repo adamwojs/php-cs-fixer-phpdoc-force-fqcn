@@ -38,43 +38,33 @@ class FQCNTypeNormalizer
      */
     public function normalizeType(NamespaceInfo $namespaceInfo, string $type): string
     {
-        return $this->normalizeTypeAfterSplitting($namespaceInfo, [$type], static::SPLITTABLE_CHARS)[0];
-    }
 
-    /**
-     * @param \AdamWojs\PhpCsFixerPhpdocForceFQCN\Analyzer\NamespaceInfo $namespaceInfo
-     * @param string[] $types
-     * @param string[]
-     *
-     * @return array
-     */
-    public function normalizeTypeAfterSplitting(NamespaceInfo $namespaceInfo, array $types, array $splittableChars): array
-    {
-        if($splittableChars === []) {
+        $typeToCheck = '';
+        $typeNew = '';
 
-            foreach($types as $typeKey => $type) {
-            
-                $types[$typeKey] = $this->normalizeSingleType($namespaceInfo, $type);
+        for ($i = 0; $i < strlen($type); $i++) {
 
+            if (in_array($type[$i], static::SPLITTABLE_CHARS)) {
+
+                if($typeToCheck !== '') {
+                    $typeNew .= $this->normalizeSingleType($namespaceInfo, $typeToCheck);
+                    $typeToCheck = '';
+                }
+
+                $typeNew .= $type[$i];
+
+                continue;
             }
 
-            return $types;
+            $typeToCheck .= $type[$i];
 
         }
 
-        $splitChar = array_pop($splittableChars);
-
-        foreach($types as $typeKey => $type) {
-
-            $splittedType = explode($splitChar, $type);
-
-            $normalized = $this->normalizeTypeAfterSplitting($namespaceInfo, $splittedType, $splittableChars);
-        
-            $types[$typeKey] = implode($splitChar, $normalized);
-
+        if($typeToCheck !== '') {
+            $typeNew .= $this->normalizeSingleType($namespaceInfo, $typeToCheck);
         }
 
-        return $types;
+        return $typeNew;
     }
 
     /**

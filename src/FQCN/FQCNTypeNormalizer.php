@@ -28,7 +28,7 @@ class FQCNTypeNormalizer
         'self'
     ];
 
-    const SPLITTABLE_CHARS = ['(', ')', '{', '}', '<', '>', '|', '&', ',', ' ', ':', "'", '"'];
+    const SPECIAL_CHARS = ['(', ')', '{', '}', '[', ']', '<', '>', '|', '&', ',', ' ', ':', "'", '"'];
 
     /**
      * @param \AdamWojs\PhpCsFixerPhpdocForceFQCN\Analyzer\NamespaceInfo $namespaceInfo
@@ -44,7 +44,7 @@ class FQCNTypeNormalizer
 
         for ($i = 0; $i < strlen($type); $i++) {
 
-            if (in_array($type[$i], static::SPLITTABLE_CHARS)) {
+            if (in_array($type[$i], static::SPECIAL_CHARS)) {
 
                 if($typeToCheck !== '') {
                     $typeNew .= $this->normalizeSingleType($namespaceInfo, $typeToCheck);
@@ -75,10 +75,6 @@ class FQCNTypeNormalizer
      */
     public function normalizeSingleType(NamespaceInfo $namespaceInfo, string $type): string
     {
-        if ('[]' === substr($type, -2)) {
-            return $this->normalizeSingleType($namespaceInfo, substr($type, 0, -2)) . '[]';
-        }
-
         if ($this->isBuildInType($type) || $this->isFQCN($type)) {
             return $type;
         }

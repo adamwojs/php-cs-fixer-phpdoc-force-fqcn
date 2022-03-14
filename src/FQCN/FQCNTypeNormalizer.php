@@ -28,6 +28,8 @@ class FQCNTypeNormalizer
         'self'
     ];
 
+    const SPECIAL_CHARS = ['(', ')', '{', '}', '[', ']', '<', '>', '|', '&', ',', ' ', ':', "'", '"'];
+
     /**
      * @param \AdamWojs\PhpCsFixerPhpdocForceFQCN\Analyzer\NamespaceInfo $namespaceInfo
      * @param string $type
@@ -36,10 +38,43 @@ class FQCNTypeNormalizer
      */
     public function normalizeType(NamespaceInfo $namespaceInfo, string $type): string
     {
-        if ('[]' === substr($type, -2)) {
-            return $this->normalizeType($namespaceInfo, substr($type, 0, -2)) . '[]';
+
+        $typeToCheck = '';
+        $typeNew = '';
+
+        for ($i = 0; $i < strlen($type); $i++) {
+
+            if (in_array($type[$i], static::SPECIAL_CHARS)) {
+
+                if($typeToCheck !== '') {
+                    $typeNew .= $this->normalizeSingleType($namespaceInfo, $typeToCheck);
+                    $typeToCheck = '';
+                }
+
+                $typeNew .= $type[$i];
+
+                continue;
+            }
+
+            $typeToCheck .= $type[$i];
+
         }
 
+        if($typeToCheck !== '') {
+            $typeNew .= $this->normalizeSingleType($namespaceInfo, $typeToCheck);
+        }
+
+        return $typeNew;
+    }
+
+    /**
+     * @param \AdamWojs\PhpCsFixerPhpdocForceFQCN\Analyzer\NamespaceInfo $namespaceInfo
+     * @param string $type
+     *
+     * @return string
+     */
+    public function normalizeSingleType(NamespaceInfo $namespaceInfo, string $type): string
+    {
         if ($this->isBuildInType($type) || $this->isFQCN($type)) {
             return $type;
         }

@@ -22,6 +22,6 @@
     }
   },
   "scripts": {
-    "fix-cs": "php-cs-fixer fix src -v --show-progress=estimating"
+    "fix-cs": "php-cs-fixer fix src -v --show-progress=dots"
   }
 }

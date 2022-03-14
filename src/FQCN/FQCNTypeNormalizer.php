@@ -8,7 +8,7 @@ use AdamWojs\PhpCsFixerPhpdocForceFQCN\Analyzer\NamespaceInfo;
 
 class FQCNTypeNormalizer
 {
-    const BUILD_IN_TYPES = [
+    public const BUILD_IN_TYPES = [
         'string',
         'integer',
         'int',
@@ -28,7 +28,7 @@ class FQCNTypeNormalizer
         'self'
     ];
 
-    const SPECIAL_CHARS = ['(', ')', '{', '}', '[', ']', '<', '>', '|', '&', ',', ' ', ':', "'", '"'];
+    public const SPECIAL_CHARS = ['(', ')', '{', '}', '[', ']', '<', '>', '|', '&', ',', ' ', ':', "'", '"'];
 
     /**
      * @param \AdamWojs\PhpCsFixerPhpdocForceFQCN\Analyzer\NamespaceInfo $namespaceInfo
@@ -38,15 +38,12 @@ class FQCNTypeNormalizer
      */
     public function normalizeType(NamespaceInfo $namespaceInfo, string $type): string
     {
-
         $typeToCheck = '';
         $typeNew = '';
 
         for ($i = 0; $i < strlen($type); $i++) {
-
             if (in_array($type[$i], static::SPECIAL_CHARS)) {
-
-                if($typeToCheck !== '') {
+                if ($typeToCheck !== '') {
                     $typeNew .= $this->normalizeSingleType($namespaceInfo, $typeToCheck);
                     $typeToCheck = '';
                 }
@@ -57,10 +54,9 @@ class FQCNTypeNormalizer
             }
 
             $typeToCheck .= $type[$i];
-
         }
 
-        if($typeToCheck !== '') {
+        if ($typeToCheck !== '') {
             $typeNew .= $this->normalizeSingleType($namespaceInfo, $typeToCheck);
         }
 
